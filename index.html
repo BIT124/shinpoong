@@ -47,7 +47,7 @@
   <div class="output" id="outputArea"></div>
 
   <script type="text/javascript">
-    async function translate() {
+     window.translate = async function () {
       const inputText = document.getElementById('koreanInput').value;
       const output = document.getElementById('outputArea');
       output.textContent = "번역 중이에요...";
