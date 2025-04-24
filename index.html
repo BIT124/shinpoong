@@ -46,43 +46,28 @@
   <button onclick="translate()">영어로 바꿔줘</button>
   <div class="output" id="outputArea"></div>
 
-  <script>
-    async function translate() {
-      const inputText = document.getElementById('koreanInput').value;
-      const output = document.getElementById('outputArea');
-      output.textContent = "번역 중이에요...";
+ <script>
+  async function translate() {
+    const inputText = document.getElementById('koreanInput').value;
+    const output = document.getElementById('outputArea');
+    output.textContent = "번역 중이에요...";
 
-      try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": "Bearer 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" // 여기에 API 키 넣기!
-          },
-          body: JSON.stringify({
-            model: "gpt-3.5-turbo",
-            messages: [
-              {
-                role: "system",
-                content: "너는 한국의 초등학생을 위한 영어 번역기야. 쉬운 영어로 번역하고, 영어 문장과 한글 발음을 함께 보여줘."
-              },
-              {
-                role: "user",
-                content: `한국어 문장: "${inputText}". 이걸 초등학생이 이해할 수 있는 아주 쉬운 영어로 바꾸고, 한글 발음도 함께 보여줘.`
-              }
-            ],
-            temperature: 0.6
-          })
-        });
+    try {
+      const response = await fetch("/api/translate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ text: inputText })
+      });
 
-        const data = await response.json();
-        const message = data.choices[0].message.content;
-        output.innerHTML = message.replace(/\n/g, "<br>");
-      } catch (error) {
-        output.textContent = "오류가 발생했어요. 다시 시도해 주세요!";
-        console.error(error);
-      }
+      const data = await response.json();
+      output.innerHTML = data.message.replace(/\n/g, "<br>");
+    } catch (error) {
+      output.textContent = "오류가 발생했어요. 다시 시도해 주세요!";
+      console.error(error);
     }
-  </script>
+  }
+</script>
 </body>
 </html>
